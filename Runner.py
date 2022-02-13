@@ -64,7 +64,7 @@ def readFile(fileName):
     with open(fileName) as fp:
         for line in fp:
             shard = parseShard(line)
-            if shard is not None and shard.size < 100000000 and shard.size >= 0: #less than 100MB
+            if shard is not None and shard.size < 1000000000 and shard.size >= 0: #less than 100MB
                 nodes_dict[shard.node].append(shard)
 
     nodes = []
@@ -74,9 +74,20 @@ def readFile(fileName):
 
 def get_moves(nodes):
     moves = []
+    print_node_balance(nodes, 'before balancing')
+
     while is_unbalanced(nodes):
         moves.append(make_move(nodes))
+
+    print_node_balance(nodes, 'after balancing')
     return moves
+
+def print_node_balance(nodes,message=''):
+    print("Small shards per node "+message)
+    print("-----------------")
+    for node in nodes:
+        print(node.node_name.__str__()+": "+str(len(node.shard_list)))
+    print()
 
 def make_move(nodes):
     max_node, min_node = get_max_min_nodes(nodes)

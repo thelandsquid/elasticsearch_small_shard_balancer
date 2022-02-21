@@ -8,17 +8,17 @@
             "name": "Py All Shards",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": "Runner.py",
             "console": "integratedTerminal",
-            "args": ["-s","200000000000"]
+            "args": ["-s","25000000000"]
         },
         {
-            "name": "Py Active Shards",
+            "name": "Py Inactive Shards",
             "type": "python",
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "args": ["-s","26000000000","-o"]
+            "args": ["-s","2600000000000","-o"]
         }
     ]
 }

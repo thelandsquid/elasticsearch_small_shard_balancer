@@ -3,11 +3,12 @@ import re
 
 class Shard:
 
-    def __init__(self, index, size, node, is_primary):
+    def __init__(self, index, size, node, is_primary, active=False):
         self.index=index
         self.size=self.convertSize(size)
         self.node=node
         self.isPrimary = is_primary=='p'
+        self.active=active;
 
     def convertSize(self,sizeStr):
         fileSize = re.sub('[0-9.]+','',sizeStr)
@@ -19,6 +20,12 @@ class Shard:
 
     def __str__(self):
         return self.index+"\t"+self.node
+
+    def setActive(self):
+        self.active=True
+
+    def __eq__(self, obj):
+        return isinstance(obj, Shard) and obj.index == self.index and obj.node == self.node
 
     #Expected format of [index-name   size   node-name   isPrimary]
     @classmethod

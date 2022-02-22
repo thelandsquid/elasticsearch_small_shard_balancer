@@ -1,4 +1,5 @@
 from collections import defaultdict
+import re
 
 class FileSizeDict:
 
@@ -18,3 +19,8 @@ class FileSizeDict:
         for value in sorted(self.inv_fileSizeDict.keys(), reverse=True):
             if size >= value:
                 return str(round(size/value,2))+self.inv_fileSizeDict[value]
+
+    def convertSize(self,sizeStr):
+        fileSize = re.sub('[0-9.]+','',sizeStr)
+        size = float(re.sub('[a-z]+','',sizeStr))
+        return size * self.fileSizeDict[fileSize]

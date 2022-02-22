@@ -59,14 +59,20 @@ class Move_Shard_Simulation:
         for node in print_nodes:
             print("{:<20} {:<15} {:<20} {:<15} {:<20}".format(str(node.node_name),node.get_size(),FileSizeDict().size_to_text(node.get_total_disk_usage()),initial_node_dict[node.node_name].get_size(),FileSizeDict().size_to_text(initial_node_dict[node.node_name].get_total_disk_usage())))
         print()
+    
+    def print_best_moves(self):
+        for move in self.best_moves:
+            print(str(move)+",")
+        print()
 
     def make_move(self,nodes):
+        #TODO Optimize to remove random index selection
         max_node, min_node = self.get_max_min_nodes(nodes)
         picked_index = self.get_shard_index(max_node)
 
         #print_node_balance(nodes,inactive_only)
 
-        while self.my_any(max_node.shard_list[picked_index].index, min_node):
+        while max_node.shard_list[picked_index].active or self.my_any(max_node.shard_list[picked_index].index, min_node):
             picked_index = random.randint(0, len(max_node.shard_list)-1)
         shard = max_node.shard_list.pop(picked_index)
         min_node.shard_list.append(shard)

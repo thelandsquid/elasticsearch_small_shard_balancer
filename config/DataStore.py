@@ -12,21 +12,26 @@ class DataStore:
         self.indices_dict = None
     
     def setup(self, fileName):
-        self.readFile(fileName)
+        return self.readFile(fileName)
     
     def readFile(self, fileName):
         self.nodes_dict = defaultdict(list)
 
-        with open(fileName) as fp:
-            for line in fp:
-                shard = Shard.parseShard(line)
-                if shard is not None:
-                    self.nodes_dict[shard.node].append(shard)
+        try:
+            with open(fileName) as fp:
+                for line in fp:
+                    shard = Shard.parseShard(line)
+                    if shard is not None:
+                        self.nodes_dict[shard.node].append(shard)
 
-        nodes_list = self.nodes_dict_to_nodes()
-        self.setup_active_shards(nodes_list)
+            nodes_list = self.nodes_dict_to_nodes()
+            self.setup_active_shards(nodes_list)
+        except:
+            print('Error reading file')
+            return -1
 
         self.nodes = nodes_list
+        return 0
 
     def nodes_dict_to_nodes(self):
         nodes = []

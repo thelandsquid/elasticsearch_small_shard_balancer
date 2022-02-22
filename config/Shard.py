@@ -7,7 +7,7 @@ class Shard:
         self.index=index
         self.size=self.convertSize(size)
         self.node=node
-        self.isPrimary = is_primary=='p'
+        self.is_primary = is_primary=='p'
         self.active=active;
 
     def convertSize(self,sizeStr):

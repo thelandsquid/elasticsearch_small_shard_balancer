@@ -1,4 +1,5 @@
 from collections import defaultdict
+from http.client import CONTINUE
 import re
 import random
 import json
@@ -9,24 +10,57 @@ from config.DataStore import DataStore
 from ActiveShards import *
 from scripts.ShardGrowth import ShardGrowth
 from scripts.SmallShardSimulation import Small_Shard_Simulation
-from scripts.LargestIndices import print_largest_indices
+from scripts.LargestIndices import LargestIndicesScript
 from config.FileSizeDict import FileSizeDict
 
-def main():
-    fileName = 'demo.txt'
-    fileName2 = 'demo2.txt'
-    #TODO change to read data in same way for each setting, remove nodes based on needed metrics
-    #TODO add boolean is_active to each shard (-f option to balance factoring active shards into total size)
-    #TODO Set goal? Equalize shards, equalize disk, best of both
-    Data = DataStore()
-    Data.setup(fileName)
-    Data2 = DataStore()
-    Data2.setup(fileName2)
+def user_commands():
+    scripts = [LargestIndicesScript, ShardGrowth]
+    
+    print('----------------------------------------')
+    print('    ELASTICSEARCH ASSISTANCE SCRIPTS    ')
+    print('----------------------------------------')
 
-    Small_Shard_Simulation(Data.nodes, args.size, 10)
-    print_largest_indices(Data,20)    
-    print()
-    ShardGrowth(Data, Data2, 10)
+    while(True):
+        print('Select script by number: ')
+        for i in range(len(scripts)):
+            print('['+str(i+1)+']',scripts[i].get_script_name())
+        print('[0] EXIT PROGRAM')
+
+        choice = input()
+        if not choice.isdigit():
+            print('CHOICE MUST BE A NUMERICAL VALUE')
+            continue
+        choice = int(choice)
+
+        if choice==0:
+            exit(0)
+        else:
+            required_args = scripts[choice-1].get_required_args()
+            args_list = []
+            for (var_name, default, desc) in required_args:
+                print("Set \""+var_name+"\" --- "+desc+"  ["+str(default)+"]")
+                user_input = input()
+                if user_input=='':
+                    user_input = default
+                args_list.append(user_input)
+            scripts[choice-1](*args_list)
+            print('\n\n')
+
+
+
+def main():
+    # fileName = 'demo1.txt'
+    # fileName2 = 'demo2.txt'
+    # Data = DataStore()
+    # Data.setup(fileName)
+    # Data2 = DataStore()
+    # Data2.setup(fileName2)
+
+    # Small_Shard_Simulation(Data.nodes, args.size, 10).print_best_moves()
+    # print_largest_indices(Data,20)    
+    # print()
+    # ShardGrowth(Data, Data2, True, 10)
+    user_commands()
 
 
 parser = argparse.ArgumentParser(description='Output moves to balance shards')

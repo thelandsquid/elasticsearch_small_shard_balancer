@@ -14,7 +14,7 @@ from scripts.LargestIndices import LargestIndicesScript
 from config.FileSizeDict import FileSizeDict
 
 def user_commands():
-    scripts = [LargestIndicesScript, ShardGrowth]
+    scripts = [LargestIndicesScript, ShardGrowth, Small_Shard_Simulation]
     
     print('----------------------------------------')
     print('    ELASTICSEARCH ASSISTANCE SCRIPTS    ')

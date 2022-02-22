@@ -6,8 +6,9 @@ from abc import abstractmethod
 from config.FileSizeDict import FileSizeDict
 
 from config.Move import Move
+from scripts.Script import Script
 
-class Move_Shard_Simulation:
+class Move_Shard_Simulation(Script):
 
     def __init__(self, nodes, condition_on_initial, num_sims):
         self.nodes = nodes
@@ -36,6 +37,7 @@ class Move_Shard_Simulation:
         self.print_node_balance(best_nodes, moved_final_nodes, 'AFTER BALANCING')
 
         self.best_moves, self.best_nodes = best_moves, best_nodes
+        self.print_best_moves()
 
     def disk_score(self,nodes):
         max_disk = max([node.get_total_disk_usage() for node in nodes])

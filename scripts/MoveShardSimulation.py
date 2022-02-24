@@ -78,6 +78,7 @@ class Move_Shard_Simulation(Script):
             picked_index = random.randint(0, len(max_node.shard_list)-1)
         shard = max_node.shard_list.pop(picked_index)
         min_node.shard_list.append(shard)
+
         return Move(shard, max_node.node_name, min_node.node_name)
 
     @abstractmethod

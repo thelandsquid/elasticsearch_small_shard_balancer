@@ -1,10 +1,11 @@
+from scripts.QuickShardEqualizer import QuickShardEqualizer
 from scripts.ShardGrowth import ShardGrowth
 from scripts.SmallShardSimulation import Small_Shard_Simulation
 from scripts.LargestIndices import LargestIndicesScript
 from config.FileSizeDict import FileSizeDict
 
 def user_commands():
-    scripts = [LargestIndicesScript, ShardGrowth, Small_Shard_Simulation]
+    scripts = [LargestIndicesScript, ShardGrowth, Small_Shard_Simulation, QuickShardEqualizer]
     
     print('----------------------------------------')
     print('    ELASTICSEARCH ASSISTANCE SCRIPTS    ')

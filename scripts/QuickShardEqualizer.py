@@ -29,7 +29,7 @@ class QuickShardEqualizer(Move_Shard_Simulation):
 
     @classmethod
     def get_script_name(cls):
-        return "Move Shards Quick Simulation"
+        return "Quickly Move Shards Simulation"
 
 
     @classmethod

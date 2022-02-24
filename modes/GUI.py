@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
+from modes.gui_elements.CommandInputFrame import CommandInputFrame
+
+from modes.gui_elements.FileSelector import FileSelector
 
 
 def GUI():
@@ -8,26 +11,9 @@ def GUI():
     root.title("Tab Widget")
     tabControl = ttk.Notebook(root)
 
-    tab1 = ttk.Frame(tabControl)
-    tab2 = ttk.Frame(tabControl)
-
-    tabControl.add(tab1, text ='Tab 1')
-    tabControl.add(tab2, text ='Tab 2')
     main_page(tabControl)
     tabControl.pack(expand = 1, fill ="both")
     
-    ttk.Label(tab1, 
-            text ="Welcome to \
-            GeeksForGeeks").grid(column = 0, 
-                                row = 0,
-                                padx = 30,
-                                pady = 30)  
-    ttk.Label(tab2,
-            text ="Lets dive into the\
-            world of computers").grid(column = 0,
-                                        row = 0, 
-                                        padx = 30,
-                                        pady = 30)
     
     root.mainloop()
 
@@ -35,46 +21,39 @@ def main_page(notebook):
        
     tab = ttk.Frame(notebook)
 
-    notebook.add(tab, text='User Input')
-    # open_button = ttk.Button(
-    #     tab,
-    #     text='Open a File',
-    #     command=select_file
-    # )
-    # open_button.pack()
+    notebook.add(tab, text='Main Menu')
 
     tab.grid_rowconfigure(0, weight=1)
     tab.grid_rowconfigure(1, weight=1)
+    tab.grid_rowconfigure(2, weight=1)
     tab.grid_columnconfigure(0, weight=1)
 
-    first_file = Frame(tab, background='yellow')
-    first_file.grid(row=0, column=0, padx=5, pady=5, sticky=NSEW)
-    first_file_label = Label(first_file, text='First Command Input')
-    first_file_label.pack()
+    info_frame = Frame(tab)
+    info_frame.grid(row=0, column=0, padx=5, pady=15, sticky=NSEW)
+    info_frame_title = Label(info_frame, text='Elasticsearch Assistance Scripts', font=('Arial',30))
+    info_frame_title.pack()
+    info_frame_description = Label(info_frame, text='A program to help diagnose issues and gather information about Elasticesarch clusters.\nRun the command below and input the output below to use the various scripts.\nSome scripts require more than one output to run.', font=('Arial',12))
+    info_frame_description.pack()
+    info_frame_command_block = Label(info_frame, text='GET _cat/shards?s=index,store,node&h=index,store,node,prirep', font=('Arial bold',12), fg='#ffffff', background='#856ff8')
+    info_frame_command_block.pack()
 
-    second_file = Frame(tab, background='red')
-    second_file.grid(row=1, column=0, padx=5, pady=5, sticky=NSEW)
-    second_file_label = Label(second_file, text='First Command Input')
-    second_file_label.pack()
+    first_file = CommandInputFrame.get(tab)
+    first_file.grid(row=1, column=0, padx=5, pady=5, sticky=NSEW)
 
 
 
-def select_file():
-    from tkinter import filedialog as fd
-    from tkinter.messagebox import showinfo
 
-    filetypes = (
-        ('text files', '*.txt'),
-        ('All files', '*.*')
-    )
 
-    filename = fd.askopenfilename(
-        title='Open a file',
-        initialdir='/',
-        filetypes=filetypes)
-    
-    return filename
 
-def script_tab(notebook):
-    tab = ttk.Frame(notebook)
+    second_file = Frame(tab)
+    second_file.grid(row=2, column=0, padx=5, pady=5, sticky=NSEW)
 
+    second_file.grid_rowconfigure(0, weight=1)
+    second_file.grid_rowconfigure(1, weight=4)
+    second_file.grid_rowconfigure(2, weight=1)
+    second_file.grid_columnconfigure(0, weight=1)
+
+    second_file_label = Label(second_file, font=('Arial bold',12), text='Second Command Input')
+    second_file_label.grid(row=0, column=0, padx=5, pady=5, sticky=W)
+    second_file_T = Text(second_file)
+    second_file_T.grid(row=1,column=0,padx=5,pady=5,sticky=NSEW)

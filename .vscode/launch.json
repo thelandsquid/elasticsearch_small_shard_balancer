@@ -5,20 +5,20 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Py All Shards",
+            "name": "Py CMD",
             "type": "python",
             "request": "launch",
             "program": "Runner.py",
             "console": "integratedTerminal",
-            "args": ["-s","25000000000"]
+            "args": ["-c"]
         },
         {
-            "name": "Py Inactive Shards",
+            "name": "Py GUI",
             "type": "python",
             "request": "launch",
-            "program": "${file}",
+            "program": "Runner.py",
             "console": "integratedTerminal",
-            "args": ["-s","2600000000000","-o"]
+            "args": []
         }
     ]
 }

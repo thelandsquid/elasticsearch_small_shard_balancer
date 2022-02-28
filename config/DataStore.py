@@ -14,6 +14,24 @@ class DataStore:
     def setup(self, fileName):
         return self.readFile(fileName)
     
+    def setup_text(self, file_text):
+        self.nodes_dict = defaultdict(list)
+
+        try:
+            for line in file_text.splitlines():
+                shard = Shard.parseShard(line)
+                if shard is not None:
+                    self.nodes_dict[shard.node].append(shard)
+
+            nodes_list = self.nodes_dict_to_nodes()
+            self.setup_active_shards(nodes_list)
+        except:
+            print('Error reading file')
+            return -1
+
+        self.nodes = nodes_list
+        return 0
+
     def readFile(self, fileName):
         self.nodes_dict = defaultdict(list)
 

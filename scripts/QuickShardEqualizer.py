@@ -7,6 +7,8 @@ from config.FileSizeDict import FileSizeDict
 
 
 from config.Move import Move
+from modes.gui_elements.gui_options.OptionsFrame import OptionsFrame
+from modes.gui_elements.gui_options.TextOption import TextOption
 from scripts.MoveShardSimulation import Move_Shard_Simulation
 
 class QuickShardEqualizer(Move_Shard_Simulation):
@@ -31,13 +33,38 @@ class QuickShardEqualizer(Move_Shard_Simulation):
     def get_script_name(cls):
         return "Quickly Move Shards Simulation"
 
+    @classmethod
+    def get_description(cls):
+        output = "Move smallest shards between nodes until each have equal number of shards.\n"
+        output += "Use output with reroute API to move shards in your cluster"
+        return output
 
     @classmethod
-    def get_required_args(cls):
+    def get_options_frame(cls,notebook):
+        return OptionsFrame(notebook, cls.get_required_args(True))
+        
+    @classmethod
+    def get_required_args(cls, only_gui=False):
         args_list = []
-        args_list.append(("file_name", "demo1.txt", "File to read the data in from"))
-        args_list.append(("size_threshold", "100mb", "Maximum size of a shard to move"))
+        if not only_gui:
+            args_list.append((TextOption, "file_name", "demo1.txt", "File to read the data in from"))
+        args_list.append((TextOption, "size_threshold", "100mb", "Maximum size of a shard to move"))
         return args_list
+    
+    @classmethod
+    def run(cls, var_dict, args, gui_script=False):
+        Data = DataStore()
+        if Data.setup_text(var_dict['file1'].get())==-1:
+            return 'Invalid input file'
+        
+        try:
+            if not args[0].isdigit():
+                args[0] = FileSizeDict().convertSize(args[0])
+            else:
+                args[0] = int(args[0])
+        except:
+            return 'Cannot parse size_threshold option'
+        return 'Work in progress'
 
     def simulate(self,num_sims):
         super(QuickShardEqualizer, self).simulate(1)

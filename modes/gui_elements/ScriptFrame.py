@@ -35,4 +35,4 @@ class ScriptFrame(tk.Frame):
         self.info_frame_description.pack()
     
     def run_program(self):
-        self.output_frame.set_output(self.script.run(self.var_dict, self.options_frame.get(),gui_script=True))
+        self.output_frame.set_output(self.script.run(self.options_frame.get(),self.var_dict,gui_script=True))

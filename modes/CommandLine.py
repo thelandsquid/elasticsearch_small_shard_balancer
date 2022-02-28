@@ -28,11 +28,11 @@ def user_commands():
         else:
             required_args = scripts[choice-1].get_required_args()
             args_list = []
-            for (var_name, default, desc) in required_args:
+            for (_, var_name, default, desc) in required_args:
                 print("Set \""+var_name+"\" --- "+desc+"  ["+str(default)+"]")
                 user_input = input()
                 if user_input=='':
                     user_input = default
                 args_list.append(user_input)
-            scripts[choice-1](*args_list)
+            print(scripts[choice-1].run(args_list))
             print('\n\n')

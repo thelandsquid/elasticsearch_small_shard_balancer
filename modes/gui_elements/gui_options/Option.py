@@ -29,7 +29,7 @@ class Option(tk.Frame):
             text = "?",
             state = "disabled"
         )
-        self.desc_button.grid(row=0,column=2,sticky=E)
+        self.desc_button.grid(row=0,column=2,pady=5,padx=5,sticky=E)
         self.hover_tip = Hovertip(self.desc_button, self.desc, hover_delay=100)
         self.set_default_value(args[2])
 

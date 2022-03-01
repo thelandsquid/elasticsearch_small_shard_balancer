@@ -29,6 +29,7 @@ class GUI():
         self.main_page = MainMenuPage(self.tab_control,self.text_file_1,self.text_file_2)
         self.tab1 = ScriptFrame(self.tab_control, self.var_dict, LargestIndicesScript)
         self.tab2 = ScriptFrame(self.tab_control, self.var_dict, ShardGrowth)
+        self.tab2 = ScriptFrame(self.tab_control, self.var_dict, QuickShardEqualizer)
         self.tab_control.pack(expand = 1, fill ="both")
         self.root.geometry("800x1000")
         

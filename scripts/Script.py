@@ -31,5 +31,5 @@ class Script():
 
     @classmethod
     @abstractmethod
-    def run(cls, var_dict, args, gui_script=False):
+    def run(cls, args, var_dict, gui_script=False):
         pass

@@ -15,11 +15,8 @@ class Move_Shard_Simulation(Script):
         self.subset_nodes = self.create_subset()
         self.condition_on_initial = condition_on_initial
         self.simulate(num_sims)
-    
-    @abstractmethod
-    def create_subset(self):
-        pass
 
+    
     def simulate(self, num_sims):
         best_score, best_moves, best_nodes = -1, None, None
         self.print_node_balance(self.subset_nodes, self.nodes, 'BEFORE BALANCING')
@@ -39,63 +36,81 @@ class Move_Shard_Simulation(Script):
         self.best_moves, self.best_nodes = best_moves, best_nodes
         self.print_best_moves()
 
-    def disk_score(self,nodes):
+    @classmethod
+    def disk_score(cls,nodes):
         max_disk = max([node.get_total_disk_usage() for node in nodes])
         min_disk = min([node.get_total_disk_usage() for node in nodes])
         return max_disk-min_disk
 
-    def get_moves(self,nodes):
+    @classmethod
+    def get_moves(cls,nodes):
         moves = []
-        while self.is_unbalanced(nodes):
-            moves.append(self.make_move(nodes))
+        while cls.is_unbalanced(nodes):
+            moves.append(cls.make_move(nodes))
 
         return moves
 
-    def print_node_balance(self,print_nodes,initial_nodes,message=''):
+    
+    @classmethod
+    def print_node_balance(cls,print_nodes,initial_nodes,message=''):
         initial_node_dict = {}
         for i_node in initial_nodes:
             initial_node_dict[i_node.node_name] = i_node
 
-        print("SHARDS PER NODE "+message)
-        print("{:<20} {:<15} {:<20} {:<15} {:<20}".format("Node","Subset_Shards","Subset_Disk_Usage","Total_Shards","Total_Disk_Usage"))
+        output = "SHARDS PER NODE "+message+'\n'
+        output += "{:<20} {:<15} {:<20} {:<15} {:<20}\n".format("Node","Subset_Shards","Subset_Disk_Usage","Total_Shards","Total_Disk_Usage")
         for node in print_nodes:
-            print("{:<20} {:<15} {:<20} {:<15} {:<20}".format(str(node.node_name),node.get_size(),FileSizeDict().size_to_text(node.get_total_disk_usage()),initial_node_dict[node.node_name].get_size(),FileSizeDict().size_to_text(initial_node_dict[node.node_name].get_total_disk_usage())))
-        print()
+            output += "{:<20} {:<15} {:<20} {:<15} {:<20}\n".format(str(node.node_name),node.get_size(),FileSizeDict().size_to_text(node.get_total_disk_usage()),initial_node_dict[node.node_name].get_size(),FileSizeDict().size_to_text(initial_node_dict[node.node_name].get_total_disk_usage()))
+        return output+'\n'
     
-    def print_best_moves(self):
-        for move in self.best_moves:
-            print(str(move)+",")
-        print()
+    
+    @classmethod
+    def print_best_moves(cls, best_moves):
+        output = ''
+        for move in best_moves:
+            output += str(move)+",\n"
+        return output+'\n'
 
-    def make_move(self,nodes):
-        #TODO Optimize to remove random index selection
-        max_node, min_node = self.get_max_min_nodes(nodes)
-        picked_index = self.get_shard_index(max_node)
-
-        #print_node_balance(nodes,inactive_only)
-
-        while max_node.shard_list[picked_index].active or self.my_any(max_node.shard_list[picked_index].index, min_node):
-            picked_index = random.randint(0, len(max_node.shard_list)-1)
-        shard = max_node.shard_list.pop(picked_index)
-        min_node.shard_list.append(shard)
-
-        return Move(shard, max_node.node_name, min_node.node_name)
-
+    @classmethod
     @abstractmethod
-    def get_shard_index(self, max_node):
+    def make_moves(cls,nodes):
         pass
 
-    def my_any(self,max_index, min_node):
+    # def make_move(self,nodes):
+    #     max_node, min_node = self.get_max_min_nodes(nodes)
+    #     picked_index = self.get_shard_index(max_node)
+
+    #     while max_node.shard_list[picked_index].active or self.my_any(max_node.shard_list[picked_index].index, min_node):
+    #         picked_index = random.randint(0, len(max_node.shard_list)-1)
+    #     shard = max_node.shard_list.pop(picked_index)
+    #     min_node.shard_list.append(shard)
+
+    #     return Move(shard, max_node.node_name, min_node.node_name)
+
+    @classmethod
+    def my_any(cls,max_index, min_node):
         for x in min_node.shard_list:
             if x.index == max_index:
                 return True
         return False
 
-    def get_max_min_nodes(self,nodes):
+    @classmethod
+    def get_max_min_nodes(cls,nodes):
         max_node = max(nodes, key=lambda node: node.get_size())
         min_node = min(nodes, key=lambda node: node.get_size())
         return max_node, min_node
 
-    def is_unbalanced(self,nodes):
-        max_node, min_node = self.get_max_min_nodes(nodes)
+    @classmethod
+    def is_unbalanced(cls,nodes):
+        max_node, min_node = cls.get_max_min_nodes(nodes)
         return (max_node.get_size()-min_node.get_size())>1
+    
+    @classmethod
+    @abstractmethod
+    def get_shard_index(self, max_node):
+        pass
+
+    @classmethod
+    @abstractmethod
+    def create_subset(self):
+        pass

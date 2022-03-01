@@ -25,15 +25,16 @@ class OptionsFrame(tk.Frame):
         options_frame.grid_columnconfigure(1, weight=1)
         
         self.options = []
-        for i in range(0,len(arg_list)//2+1,2):
-            options_frame.grid_rowconfigure(i//2, weight=1)
-            
-            self.options.append(arg_list[i][0](options_frame,arg_list[i]))
-            self.options[i].grid(row=i//2,column=0,padx=5,pady=5,sticky=NSEW)
+        if len(arg_list)>0:
+            for i in range(0,len(arg_list)//2+1,2):
+                options_frame.grid_rowconfigure(i//2, weight=1)
+                
+                self.options.append(arg_list[i][0](options_frame,arg_list[i]))
+                self.options[i].grid(row=i//2,column=0,padx=5,pady=5,sticky=NSEW)
 
-            if i+1<len(arg_list):
-                self.options.append(arg_list[i+1][0](options_frame,arg_list[i+1]))
-                self.options[i+1].grid(row=i//2,column=1,padx=5,pady=5,sticky=NSEW)
+                if i+1<len(arg_list):
+                    self.options.append(arg_list[i+1][0](options_frame,arg_list[i+1]))
+                    self.options[i+1].grid(row=i//2,column=1,padx=5,pady=5,sticky=NSEW)
 
     def get(self):
         opt_list = []

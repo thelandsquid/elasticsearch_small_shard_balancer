@@ -31,7 +31,7 @@ class QuickShardEqualizer(Move_Shard_Simulation):
 
     @classmethod
     def get_script_name(cls):
-        return "Quickly Move Shards Simulation"
+        return "Quickly Equalize Shards"
 
     @classmethod
     def get_description(cls):
@@ -48,40 +48,51 @@ class QuickShardEqualizer(Move_Shard_Simulation):
         args_list = []
         if not only_gui:
             args_list.append((TextOption, "file_name", "demo1.txt", "File to read the data in from"))
-        args_list.append((TextOption, "size_threshold", "100mb", "Maximum size of a shard to move"))
         return args_list
     
     @classmethod
-    def run(cls, var_dict, args, gui_script=False):
-        Data = DataStore()
-        if Data.setup_text(var_dict['file1'].get())==-1:
-            return 'Invalid input file'
-        
-        try:
-            if not args[0].isdigit():
-                args[0] = FileSizeDict().convertSize(args[0])
-            else:
-                args[0] = int(args[0])
-        except:
-            return 'Cannot parse size_threshold option'
-        return 'Work in progress'
-
-    def simulate(self,num_sims):
-        super(QuickShardEqualizer, self).simulate(1)
-
-    def create_subset(self):
-        return copy.deepcopy(self.nodes)
+    def run(cls, args, var_dict, gui_script=False):
+        if gui_script:
+            Data = DataStore()
+            if Data.setup_text(var_dict['file1'].get())==-1:
+                return 'Invalid input file'
+            return cls.simulate(Data.nodes)
     
-    def get_shard_index(self, max_node):
+    @classmethod
+    def simulate(cls, nodes):
+        best_score, best_moves, best_nodes = -1, None, None
+        subset_nodes = cls.create_subset(nodes)
+        output = cls.print_node_balance(subset_nodes, nodes, 'BEFORE BALANCING')
+
+        temp_nodes = copy.deepcopy(subset_nodes)
+        temp_moves = cls.get_moves(temp_nodes)
+        temp_score = cls.disk_score(Move.apply_moves(nodes) if False else temp_nodes)
+        if best_moves is None or temp_score<best_score:
+            best_score = temp_score
+            best_moves = temp_moves
+            best_nodes = temp_nodes
+        
+        moved_final_nodes = Move.apply_moves(nodes, best_moves)
+        output += cls.print_node_balance(best_nodes, moved_final_nodes, 'AFTER BALANCING')
+
+        best_moves, best_nodes = best_moves, best_nodes
+        return output + cls.print_best_moves(best_moves)
+
+    @classmethod
+    def create_subset(cls, nodes):
+        return copy.deepcopy(nodes)
+    
+    @classmethod
+    def get_shard_index(cls, max_node):
         return random.randint(0, len(max_node.shard_list)-1)
 
-    def make_move(self,nodes):
-        #TODO Optimize to remove random index selection
-        max_node, min_node = self.get_max_min_nodes(nodes)
+    @classmethod
+    def make_move(cls,nodes):
+        max_node, min_node = cls.get_max_min_nodes(nodes)
 
         max_node_shard_list = sorted(max_node.shard_list, key=lambda x:x.size)
         picked_index = 0
-        while max_node_shard_list[picked_index].size==0 or self.my_any(max_node_shard_list[picked_index].index, min_node):
+        while max_node_shard_list[picked_index].size==0 or cls.my_any(max_node_shard_list[picked_index].index, min_node):
             picked_index+=1
 
         shard = max_node.shard_list.pop(picked_index)
@@ -89,3 +100,22 @@ class QuickShardEqualizer(Move_Shard_Simulation):
 
 
         return Move(shard, max_node.node_name, min_node.node_name)
+    
+    @classmethod
+    def print_node_balance(cls,print_nodes,initial_nodes,message=''):
+        initial_node_dict = {}
+        for i_node in initial_nodes:
+            initial_node_dict[i_node.node_name] = i_node
+
+        output = "SHARDS PER NODE "+message+'\n'
+        output += "{:<20} {:<15} {:<20}\n".format("Node","Total_Shards","Total_Disk_Usage")
+        for node in print_nodes:
+            output += "{:<20} {:<15} {:<20}\n".format(str(node.node_name),initial_node_dict[node.node_name].get_size(),FileSizeDict().size_to_text(initial_node_dict[node.node_name].get_total_disk_usage()))
+        return output+'\n'
+    
+    @classmethod
+    def print_best_moves(cls, best_moves):
+        output = ''
+        for move in best_moves:
+            output += str(move)+ ("" if move==best_moves[-1] else ",") + "\n"
+        return output+'\n'

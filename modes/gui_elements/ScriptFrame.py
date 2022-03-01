@@ -15,16 +15,22 @@ class ScriptFrame(tk.Frame):
         self.var_dict=var_dict
         notebook.add(self, text=self.script.get_script_name())
 
-        self.grid_rowconfigure(0, weight=1)
-        self.grid_rowconfigure(1, weight=1)
-        self.grid_rowconfigure(2, weight=6)
-        self.grid_columnconfigure(0, weight=1)
-
         self.header_frame()
         self.options_frame = script.get_options_frame(self)
-        self.options_frame.grid(row=1, column=0, padx=5, pady=15, sticky=NSEW)
         self.output_frame = OutputFrame(self,self.script,'temp args')
-        self.output_frame.grid(row=2, column=0, padx=5, pady=15, sticky=NSEW)
+
+        if len(script.get_required_args(True))>0:
+            self.grid_rowconfigure(0, weight=1)
+            self.grid_rowconfigure(1, weight=1)
+            self.grid_rowconfigure(2, weight=6)
+            self.grid_columnconfigure(0, weight=1)
+            self.options_frame.grid(row=1, column=0, padx=5, pady=15, sticky=NSEW)
+            self.output_frame.grid(row=2, column=0, padx=5, pady=15, sticky=NSEW)
+        else:
+            self.grid_rowconfigure(0, weight=1)
+            self.grid_rowconfigure(1, weight=6)
+            self.grid_columnconfigure(0, weight=1)
+            self.output_frame.grid(row=1, column=0, padx=5, pady=15, sticky=NSEW)
 
     def header_frame(self):
         self.info_frame = Frame(self)

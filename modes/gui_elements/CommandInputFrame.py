@@ -19,7 +19,7 @@ class CommandInputFrame(tk.Frame):
 
         self.self_label = Label(self, font=('Arial bold',12), text=title)
         self.self_label.grid(row=0, column=0, padx=5, pady=5, sticky=SW)
-        self.self_T = ScrolledText(self, height=4)
+        self.self_T = ScrolledText(self, height=4, undo=True, maxundo=3)
         self.self_T.grid(row=1,column=0,padx=5,pady=5,sticky=NSEW)
 
         self.button_frame = Frame(self, borderwidth=1, relief=RIDGE)

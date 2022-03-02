@@ -21,8 +21,8 @@ class OptionsFrame(tk.Frame):
         options_frame = tk.Frame(self)
         options_frame.grid(row=1,column=0,sticky=NSEW)
 
-        options_frame.grid_columnconfigure(0, weight=1)
-        options_frame.grid_columnconfigure(1, weight=1)
+        options_frame.grid_columnconfigure(0, weight=1, uniform="fred")
+        options_frame.grid_columnconfigure(1, weight=1, uniform="fred")
         
         self.options = []
         if len(arg_list)>0:

@@ -19,7 +19,7 @@ class Option(tk.Frame):
         self.desc = args[3]
 
         self.title_L = Label(self, font=('Arial',12),text=self.title)
-        self.title_L.grid(row=0,column=0,padx=10,sticky=W)
+        self.title_L.grid(row=0,column=0,padx=5,sticky=W)
 
         self.option_element = self.get_option_element()
         self.option_element.grid(row=0,column=1,padx=5,sticky=E)
@@ -27,7 +27,8 @@ class Option(tk.Frame):
         self.desc_button = ttk.Button(
             self,
             text = "?",
-            state = "disabled"
+            state = "disabled",
+            width=5
         )
         self.desc_button.grid(row=0,column=2,pady=5,padx=5,sticky=E)
         self.hover_tip = Hovertip(self.desc_button, self.desc, hover_delay=100)

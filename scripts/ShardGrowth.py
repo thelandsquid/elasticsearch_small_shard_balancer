@@ -24,7 +24,7 @@ class ShardGrowth:
         elif use_primary=='f' or use_primary=='false':
             use_primary=False
         else:
-            print('Invalid value for \"use_only_primary_shards\"')
+            print('Invalid value for \"only primary shards\"')
             return
         
         if not limit.isdigit():
@@ -54,7 +54,7 @@ class ShardGrowth:
             elif args[0]=='f' or args[0]=='false':
                 args[0]=False
             else:
-                return 'Invalid value for \"use_only_primary_shards\"'
+                return 'Invalid value for \"only primary shards\"'
             
             if not args[1].isdigit():
                 return 'Invalid limit'
@@ -75,7 +75,7 @@ class ShardGrowth:
             elif args[2]=='f' or args[2]=='false':
                 args[2]=False
             else:
-                print('Invalid value for \"use_only_primary_shards\"')
+                print('Invalid value for \"only primary shards\"')
                 return
             
             if not args[3].isdigit():
@@ -94,7 +94,7 @@ class ShardGrowth:
         if not only_gui:
             args_list.append((TextOption, "file_name1", "demo1.txt", "File to read the past data in from"))
             args_list.append((TextOption, "file_name2", "demo2.txt", "File to read the current data in from"))
-        args_list.append((TextOption, "use_only_primary_shards", "T", "Whether to use only primary shards or not (T or F)"))
+        args_list.append((TextOption, "only primary shards", "T", "Whether to use only primary shards or not (T or F)"))
         args_list.append((TextOption, "limit", "20", "Limit on how many indices to print (per node)"))
         return args_list
 

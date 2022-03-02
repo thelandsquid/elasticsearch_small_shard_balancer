@@ -21,8 +21,11 @@ class MainMenuPage(tk.Frame):
         self.info_frame_title.pack()
         self.info_frame_description = Label(self.info_frame, text='A program to help diagnose issues and gather information about Elasticesarch clusters.\nRun the command below and input the output below to use the various scripts.\nSome scripts require more than one output to run.', font=('Arial',12))
         self.info_frame_description.pack()
-        self.info_frame_command_block = Label(self.info_frame, text='GET _cat/shards?s=index,store,node&h=index,store,node,prirep', font=('Arial bold',12), fg='#ffffff', background='#856ff8')
+        self.info_frame_command_block = ttk.Entry(self.info_frame, font=('Arial bold',12), background='black', foreground='black', width=55)
+        self.info_frame_command_block.insert(0, 'GET _cat/shards?s=index,store,node&h=index,store,node,prirep')
+        
         self.info_frame_command_block.pack()
+        self.info_frame_command_block.configure(state='readonly')
 
         self.first_file = CommandInputFrame(self, file1, "First Command Input")
         self.first_file.grid(row=1, column=0, padx=5, pady=5, sticky=NSEW)

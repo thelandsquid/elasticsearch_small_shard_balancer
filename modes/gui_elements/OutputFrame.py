@@ -23,7 +23,7 @@ class OutputFrame(tk.Frame):
         self.self_label.grid(row=0, column=0, padx=5, pady=5, sticky=SW)
 
         self.self_T = ScrolledText(self, height=10)
-        self.self_T.bind("<Key>", lambda e: "break")
+        self.self_T.bind("<Button>", lambda event: self.self_T.focus_set())
         self.self_T.grid(row=1,column=0,padx=5,pady=5,sticky=NSEW)
 
         self.run_program_button = ttk.Button(
@@ -34,5 +34,7 @@ class OutputFrame(tk.Frame):
         self.run_program_button.grid(row=2,column=0,padx=5,pady=5,sticky=NSEW)
 
     def set_output(self,output_str):
+        self.self_T.config(state=NORMAL)
         self.self_T.delete("1.0", END)
         self.self_T.insert(END,output_str)
+        self.self_T.config(state=DISABLED)
